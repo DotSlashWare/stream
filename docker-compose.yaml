@@ -1,0 +1,53 @@
+name: dotslashstream
+
+networks: 
+  stream_external:
+    driver: host
+    internal: false
+  stream_internal:
+    driver: bridge
+    internal: true
+
+services:
+  backend: 
+    build: ./backend
+    restart: unless-stopped
+    ports:
+      - 80:80
+    networks:
+      - stream_internal
+      - stream_external
+    volumes:
+      - backend_logs:/var/log/stream
+    env_file:
+    - .envs/backend.env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:latest
+    restart: unless-stopped
+    networks:
+      - stream_internal
+    volumes:
+      - database_data:/var/lib/postgresql/data
+    env_file:
+      - .envs/postgres.env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER -d $POSTGRES_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  backend_logs:
+  database_data:
+
+
