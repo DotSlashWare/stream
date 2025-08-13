@@ -9,18 +9,27 @@ type Env struct {
 	ContextTimout  int
 	Port           string
 	LogPath        string
+	Environment    string
 	PostgresURL    string
 	TheMovieDBAPI  string
+	TheMovieDBKey  string
 	FirstTimeSetup bool
 }
 
 func NewEnv() *Env {
 	return &Env{
 		ContextTimout: getEnvOrDefaultInt("CONTEXT_TIMEOUT", 30),
-		Port:          getEnvOrDefault("PORT", "80"),
+		Port:          getEnvOrDefault("PORT", "9340"),
 		LogPath:       getEnvOrDefault("LOG_PATH", "/var/log/stream"),
+		Environment:   getEnvOrDefault("ENVIRONMENT", "release"),
 		PostgresURL:   getEnvOrDefault("POSTGRES_URL", "postgresql://stream_admin:stream_admin@postgres:5432/stream?sslmode=disable"),
+		TheMovieDBAPI: getEnvOrDefault("TMDB_API", "https://api.themoviedb.org/3"),
+		TheMovieDBKey: getEnvOrDefault("TMDB_KEY", "none"),
 	}
+}
+
+func (env *Env) GetServerAddress() string {
+	return "0.0.0.0" + ":" + env.Port
 }
 
 func getEnvOrDefault(key string, defaultValue string) string {
