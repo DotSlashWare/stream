@@ -14,7 +14,7 @@ func (c *Config) SetupProtocol() {
 		return
 	}
 
-	configPath := filepath.Join(configDir, "protocol.json")
+	configPath := filepath.Join(configDir, "backend.config.json")
 
 	configData, err := json.MarshalIndent(c, "", "  ")
 	if err != nil {

@@ -1,27 +1,27 @@
 package config
 
 type TMDBServiceConfig struct {
-	TMDBAPIUrl   string `json:"tmdbapi_url"`
-	TMDBAPIKey   string	`json:"tmdbapi_key,omitempty"`
+    TMDBAPIUrl string `json:"tmdb_api_url"`
+    TMDBAPIKey string `json:"tmdb_api_key"`
 }
 
 type InvidiousServiceConfig struct {
-	VideoAPIUrl string `json:"videoapi_url"`
-	VideoAPIKey string `json:"videoapi_key,omitempty"`
+    VideoAPIUrl string `json:"video_api_url"`
+    VideoAPIKey string `json:"video_api_key"`
 }
 
 type LocalServiceConfig struct {
-	MediaPath string `json:"save_path"`
+    MediaPath string `json:"media_path"`
 }
 
 type MovieConfig struct {
-	StreamAPIUrl string `json:"streamapi_url"`
+    StreamAPIUrl string `json:"stream_api_url"`
 }
 
 type TVConfig struct {
-	StreamAPIUrl string `json:"streamapi_url"`
+    StreamAPIUrl string `json:"stream_api_url"`
 }
 
 type VideoConfig struct {
-	StreamAPIUrl string `json:"streamapi_url"`
+    StreamAPIUrl string `json:"stream_api_url"`
 }

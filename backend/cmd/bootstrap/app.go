@@ -13,8 +13,8 @@ import (
 type Application struct {
 	InitTime time.Time
 	Env      *Env
-	Config   *config.Config
 	Router   *gin.Engine
+	Config   *config.Config
 	Postgres *postgres.Manager
 	Services Services
 }
@@ -35,7 +35,6 @@ func (app *Application) Shutdown() {
 func NewApplication() *Application {
 	env := NewEnv()
 	router := gin.New()
-	config := config.NewConfig()
 	err := router.SetTrustedProxies(nil) // Disable trusted proxies for security
 	if err != nil {
 		log.Fatalf("Failed to set trusted proxies: %v.", err)
@@ -44,16 +43,17 @@ func NewApplication() *Application {
 	return &Application{
 		InitTime: time.Now(),
 		Env:      env,
-		Config:   config,
 		Router:   router,
+		Config:   nil,
 		Postgres: nil, // will be initialized in the init protocol
+		Services: Services{},
 	}
 }
 
 func (app *Application) Start() {
 	env := app.Env
-	app.LoadConfig()
 	app.SetupLogging()
+	app.LoadConfig()
 	app.SetupServices()
 	app.SetupDatabases()
 	app.RegisterMiddleware()
