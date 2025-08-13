@@ -17,7 +17,7 @@ services:
     networks:
       - stream_external
     volumes:
-      - stream_logs:/var/log/stream
+      - stream_data:/var/log/stream
     depends_on:
       backend:
         condition: service_healthy
@@ -33,8 +33,11 @@ services:
       - stream_internal
       - stream_external
     volumes:
-      - stream_logs:/var/log/stream
-      - ./scripts/backend:/app/scripts
+      - stream_data:/var/log/stream
+      - stream_data:/var/config/stream
+      - stream_media:/var/media/stream
+      - ./scripts/backend:/var/scripts/stream
+      - ./configs/backend:/var/config/stream
     env_file:
       - ./.envs/backend.env
     healthcheck:
@@ -63,5 +66,6 @@ services:
       retries: 5
 
 volumes:
-  stream_logs:
+  stream_data:
+  stream_media:
   stream_databases:
