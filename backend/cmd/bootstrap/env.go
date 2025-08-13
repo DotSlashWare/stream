@@ -20,7 +20,7 @@ func NewEnv() *Env {
 	return &Env{
 		ContextTimout: getEnvOrDefaultInt("CONTEXT_TIMEOUT", 30),
 		Port:          getEnvOrDefault("PORT", "9340"),
-		LogPath:       getEnvOrDefault("LOG_PATH", "/var/log/stream"),
+		LogPath:       getEnvOrDefault("LOG_PATH", "/var/log/stream/"),
 		Environment:   getEnvOrDefault("ENVIRONMENT", "release"),
 		PostgresURL:   getEnvOrDefault("POSTGRES_URL", "postgresql://stream_admin:stream_admin@postgres:5432/stream?sslmode=disable"),
 		TheMovieDBAPI: getEnvOrDefault("TMDB_API", "https://api.themoviedb.org/3"),

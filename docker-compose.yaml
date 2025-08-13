@@ -16,6 +16,8 @@ services:
       - 80:3000
     networks:
       - stream_external
+    volumes:
+      - stream_logs:/var/log/stream
     depends_on:
       backend:
         condition: service_healthy
@@ -31,7 +33,7 @@ services:
       - stream_internal
       - stream_external
     volumes:
-      - backend_logs:/var/log/stream
+      - stream_logs:/var/log/stream
       - ./scripts/backend:/app/scripts
     env_file:
       - ./.envs/backend.env
@@ -51,7 +53,7 @@ services:
     networks:
       - stream_internal
     volumes:
-      - database_data:/var/lib/postgresql/data
+      - stream_databases:/var/lib/postgresql/data
     env_file:
       - ./.envs/postgres.env
     healthcheck:
@@ -61,5 +63,5 @@ services:
       retries: 5
 
 volumes:
-  backend_logs:
-  database_data:
+  stream_logs:
+  stream_databases:
