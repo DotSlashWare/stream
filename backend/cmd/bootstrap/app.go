@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/artumont/DotSlashStream/backend/internal/database/postgres"
+	"github.com/artumont/DotSlashStream/backend/internal/utils/config"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,6 +13,7 @@ import (
 type Application struct {
 	InitTime time.Time
 	Env      *Env
+	Config   *config.Config
 	Router   *gin.Engine
 	Postgres *postgres.Manager
 	Services Services
@@ -19,11 +21,11 @@ type Application struct {
 
 // Shutdown protocol for gracefully shutting down the application. It closes all database connections and logs the shutdown process.
 func (app *Application) Shutdown() {
-	log.Println("Shutting down application...")
+	log.Println("Shutting down application.")
 	// @logic: Postgres Shutdown
 	if app.Postgres != nil {
 		if err := app.Postgres.Close(); err != nil {
-			log.Printf("Error closing Postgres connection: %v", err)
+			log.Printf("Error closing Postgres connection: %v.", err)
 		}
 	}
 	log.Println("Application shutdown complete.")
@@ -33,14 +35,16 @@ func (app *Application) Shutdown() {
 func NewApplication() *Application {
 	env := NewEnv()
 	router := gin.New()
+	config := config.NewConfig()
 	err := router.SetTrustedProxies(nil) // Disable trusted proxies for security
 	if err != nil {
-		log.Fatalf("Failed to set trusted proxies: %v", err)
+		log.Fatalf("Failed to set trusted proxies: %v.", err)
 	}
 
 	return &Application{
 		InitTime: time.Now(),
 		Env:      env,
+		Config:   config,
 		Router:   router,
 		Postgres: nil, // will be initialized in the init protocol
 	}
@@ -48,7 +52,9 @@ func NewApplication() *Application {
 
 func (app *Application) Start() {
 	env := app.Env
+	app.LoadConfig()
 	app.SetupLogging()
+	app.SetupServices()
 	app.SetupDatabases()
 	app.RegisterMiddleware()
 	app.RegisterControllers()

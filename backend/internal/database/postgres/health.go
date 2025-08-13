@@ -3,9 +3,9 @@ package postgres
 import "time"
 
 // Performs a health check on the PostgreSQL connection and returns the health status and latency.
-func (m *Manager) GetHealth() (bool, int64) {
+func (manager *Manager) GetHealth() (bool, int64) {
 	start_time := time.Now()
-	if !m.IsHealthy() {
+	if !manager.IsHealthy() {
 		return false, 0
 	}
 

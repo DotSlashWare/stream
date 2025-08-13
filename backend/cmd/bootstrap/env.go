@@ -11,8 +11,6 @@ type Env struct {
 	LogPath        string
 	Environment    string
 	PostgresURL    string
-	TheMovieDBAPI  string
-	TheMovieDBKey  string
 	FirstTimeSetup bool
 }
 
@@ -23,8 +21,6 @@ func NewEnv() *Env {
 		LogPath:        getEnvOrDefault("LOG_PATH", "/var/log/stream"),
 		Environment:    getEnvOrDefault("ENVIRONMENT", "release"),
 		PostgresURL:    getEnvOrDefault("POSTGRES_URL", "postgresql://stream_admin:stream_admin@postgres:5432/stream?sslmode=disable"),
-		TheMovieDBAPI:  getEnvOrDefault("TMDB_API", "https://api.themoviedb.org/3"),
-		TheMovieDBKey:  getEnvOrDefault("TMDB_KEY", "none"),
 	}
 }
 

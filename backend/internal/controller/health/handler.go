@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (c *Controller) GetHealth(ctx *gin.Context) {
+func (controller *Controller) GetHealth(ctx *gin.Context) {
 	// @returns
 	// {
 	//   "status": "healthy",
@@ -18,7 +18,7 @@ func (c *Controller) GetHealth(ctx *gin.Context) {
 	})
 }
 
-func (c *Controller) GetHealthDetailed(ctx *gin.Context) {
+func (controller *Controller) GetHealthDetailed(ctx *gin.Context) {
 	// @returns
 	// {
 	//   "status": "healthy",
@@ -29,20 +29,20 @@ func (c *Controller) GetHealthDetailed(ctx *gin.Context) {
 	//   }
 	// }
 
-	postgresStatus, postgresLatency := c.postgresManager.GetHealth()
+	postgresStatus, postgresLatency := controller.postgresManager.GetHealth()
 
 	databases := Databases{
 		Postgres: ServiceHealth{
 			Status:  getHealthStatus(postgresStatus),
 			Latency: postgresLatency,
-			Uptime:  time.Since(c.postgresManager.ConnectionTime).String(),
+			Uptime:  time.Since(controller.postgresManager.ConnectionTime).String(),
 		},
 	}
 
 	ctx.JSON(200, DetailedHealthResponse{
 		Status:    "healthy",
 		Timestamp: time.Now().Format(time.RFC3339),
-		Uptime:    time.Since(c.initTime).String(),
+		Uptime:    time.Since(controller.initTime).String(),
 		Databases: databases,
 	})
 }

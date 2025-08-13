@@ -25,8 +25,8 @@ func NewLoggerMiddleware(router *gin.Engine, logPath string) *LoggerMiddleware {
 }
 
 // Sets up the logging middleware for the Gin router with rotation.
-func (m *LoggerMiddleware) Register(router *gin.Engine) {
-	logPath := m.logPath
+func (middleware *LoggerMiddleware) Register(router *gin.Engine) {
+	logPath := middleware.logPath
 
 	writer, err := rotatelogs.New(
 		logPath+"gin.%Y-%m-%d-%H_%M",
@@ -35,17 +35,17 @@ func (m *LoggerMiddleware) Register(router *gin.Engine) {
 		rotatelogs.WithRotationTime(1*time.Hour),
 	)
 	if err != nil {
-		log.Fatalf("Failed to create gin log file writer: %v", err)
+		log.Fatalf("Failed to create gin log file writer: %v.", err)
 	}
-	log.Println("Gin Log file writer created successfully")
+	log.Println("Gin Log file writer created successfully.")
 
 	multiWriter := io.MultiWriter(os.Stdout, writer)
 	router.Use(gin.LoggerWithConfig(
 		gin.LoggerConfig{
-			Formatter: m.Formatter.Format,
+			Formatter: middleware.Formatter.Format,
 			Output:    multiWriter,
 			SkipPaths: []string{"/health", "/metrics"}, // Skip logging for health and metrics endpoints
 		},
 	))
-	log.Println("Gin Logger middleware registered successfully")
+	log.Println("Gin Logger middleware registered successfully.")
 }

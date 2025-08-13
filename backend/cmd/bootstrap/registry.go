@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/artumont/DotSlashStream/backend/internal/controller/health"
+	"github.com/artumont/DotSlashStream/backend/internal/controller/movie"
 	"github.com/artumont/DotSlashStream/backend/internal/middleware/logger"
 )
 
@@ -17,7 +18,12 @@ func (app *Application) RegisterControllers() {
 		healthController.Register(app.Router)
 	}
 
-	log.Println("Registered controllers successfully")
+	{ // @logic: Movie Controller
+		movieController := movie.NewMovieController(app.Services.Tmdb)
+		movieController.Register(app.Router)
+	}
+
+	log.Println("Registered controllers successfully.")
 }
 
 // Middleware registration protocol for setting up global middleware.
@@ -27,8 +33,8 @@ func (app *Application) RegisterMiddleware() {
 	{ // @logic: Logger Middleware (global)
 		logger := logger.NewLoggerMiddleware(app.Router, env.LogPath)
 		logger.Register(app.Router)
-		log.Printf("Logger middleware registered with log path: %s", env.LogPath)
+		log.Printf("Logger middleware registered with log path: %s.", env.LogPath)
 	}
 
-	log.Println("Registered global middleware successfully")
+	log.Println("Registered global middleware successfully.")
 }

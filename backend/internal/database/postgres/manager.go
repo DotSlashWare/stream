@@ -23,18 +23,18 @@ func NewManager(connectionString string, contextTimout int, logSanitizer *saniti
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(contextTimout)*time.Second)
 	defer cancel()
 
-	log.Printf("Connecting to PostgreSQL at %s with timeout %d seconds", logSanitizer.CleanString(connectionString), contextTimout)
+	log.Printf("Connecting to PostgreSQL at %s with timeout %d seconds.", logSanitizer.CleanString(connectionString), contextTimout)
 	client, err := sql.Open("postgres", connectionString)
 	if err != nil {
-		log.Fatalf("Failed to connect to PostgreSQL: %v", err)
+		log.Fatalf("Failed to connect to PostgreSQL: %v.", err)
 	}
-	log.Println("Connected to PostgreSQL successfully")
+	log.Println("Connected to PostgreSQL successfully.")
 
-	log.Printf("Pinging PostgreSQL at %s", logSanitizer.CleanString(connectionString))
+	log.Printf("Pinging PostgreSQL at %s.", logSanitizer.CleanString(connectionString))
 	if err = client.PingContext(ctx); err != nil {
-		log.Fatalf("Failed to ping PostgreSQL: %v", err)
+		log.Fatalf("Failed to ping PostgreSQL: %v.", err)
 	}
-	log.Println("PostgreSQL ping successful")
+	log.Println("PostgreSQL ping successful.")
 
 	return &Manager{
 		Client:         client,
@@ -45,28 +45,28 @@ func NewManager(connectionString string, contextTimout int, logSanitizer *saniti
 }
 
 // Performs a health check on the PostgreSQL connection by pinging the server.
-func (m *Manager) IsHealthy() bool {
-	ctx, cancel := context.WithTimeout(context.Background(), m.ContextTimeout)
+func (manager *Manager) IsHealthy() bool {
+	ctx, cancel := context.WithTimeout(context.Background(), manager.ContextTimeout)
 	defer cancel()
 
-	err := m.Client.PingContext(ctx)
+	err := manager.Client.PingContext(ctx)
 	if err != nil {
-		log.Printf("PostgreSQL is not healthy: %v", err)
+		log.Printf("PostgreSQL is not healthy: %v.", err)
 		return false
 	}
 
-	log.Println("PostgreSQL is healthy")
+	log.Println("PostgreSQL is healthy.")
 	return true
 }
 
 // Closes the PostgreSQL connection gracefully, ensuring all resources are released.
-func (m *Manager) Close() error {
-	err := m.Client.Close()
+func (manager *Manager) Close() error {
+	err := manager.Client.Close()
 	if err != nil {
-		log.Printf("Failed to close PostgreSQL connection: %v", err)
+		log.Printf("Failed to close PostgreSQL connection: %v.", err)
 		return err
 	}
 
-	log.Println("PostgreSQL connection closed successfully")
+	log.Println("PostgreSQL connection closed successfully.")
 	return nil
 }

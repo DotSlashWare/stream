@@ -55,7 +55,7 @@ func (p *Parser) ParseMetadata(content string) *ScriptMetadata {
 	jsonStr := strings.Join(metadataLines, "")
 	var metadata ScriptMetadata
 	if err := json.Unmarshal([]byte(jsonStr), &metadata); err != nil {
-		log.Printf("Warning: failed to parse script metadata: %v", err)
+		log.Printf("Warning: failed to parse script metadata: %v.", err)
 		return nil
 	}
 
@@ -306,7 +306,7 @@ func (p *Parser) ValidateSQL(sqlContent string) error {
 	upperContent := strings.ToUpper(content)
 	for _, pattern := range dangerousPatterns {
 		if matched, _ := regexp.MatchString(pattern, upperContent); matched {
-			log.Printf("Warning: Potentially dangerous SQL pattern detected: %s", pattern)
+			log.Printf("Warning: Potentially dangerous SQL pattern detected: %s.", pattern)
 		}
 	}
 
