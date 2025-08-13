@@ -43,7 +43,7 @@ func (c *Controller) GetHealthDetailed(ctx *gin.Context) {
 		Status:    "healthy",
 		Timestamp: time.Now().Format(time.RFC3339),
 		Uptime:    time.Since(c.initTime).String(),
-		Databases:  databases,
+		Databases: databases,
 	})
 }
 

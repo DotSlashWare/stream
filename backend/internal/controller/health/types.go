@@ -8,10 +8,10 @@ type HealthResponse struct {
 
 // DetailedHealthResponse represents the detailed health check response
 type DetailedHealthResponse struct {
-	Status    string   `json:"status"`
-	Timestamp string   `json:"timestamp"`
-	Uptime    string   `json:"uptime"`
-	Databases  Databases `json:"databases"` // Contains health status of individual databases
+	Status    string    `json:"status"`
+	Timestamp string    `json:"timestamp"`
+	Uptime    string    `json:"uptime"`
+	Databases Databases `json:"databases"` // Contains health status of individual databases
 }
 
 // Represents the health status of multiple services
