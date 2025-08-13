@@ -6,7 +6,7 @@ import (
 )
 
 type Env struct {
-	ContextTimout  int
+	ContextTimeout int
 	Port           string
 	LogPath        string
 	Environment    string
@@ -18,13 +18,13 @@ type Env struct {
 
 func NewEnv() *Env {
 	return &Env{
-		ContextTimout: getEnvOrDefaultInt("CONTEXT_TIMEOUT", 30),
-		Port:          getEnvOrDefault("PORT", "9340"),
-		LogPath:       getEnvOrDefault("LOG_PATH", "/var/log/stream"),
-		Environment:   getEnvOrDefault("ENVIRONMENT", "release"),
-		PostgresURL:   getEnvOrDefault("POSTGRES_URL", "postgresql://stream_admin:stream_admin@postgres:5432/stream?sslmode=disable"),
-		TheMovieDBAPI: getEnvOrDefault("TMDB_API", "https://api.themoviedb.org/3"),
-		TheMovieDBKey: getEnvOrDefault("TMDB_KEY", "none"),
+		ContextTimeout: getEnvOrDefaultInt("CONTEXT_TIMEOUT", 30),
+		Port:           getEnvOrDefault("PORT", "9340"),
+		LogPath:        getEnvOrDefault("LOG_PATH", "/var/log/stream"),
+		Environment:    getEnvOrDefault("ENVIRONMENT", "release"),
+		PostgresURL:    getEnvOrDefault("POSTGRES_URL", "postgresql://stream_admin:stream_admin@postgres:5432/stream?sslmode=disable"),
+		TheMovieDBAPI:  getEnvOrDefault("TMDB_API", "https://api.themoviedb.org/3"),
+		TheMovieDBKey:  getEnvOrDefault("TMDB_KEY", "none"),
 	}
 }
 
@@ -49,6 +49,7 @@ func getEnvOrDefaultInt(key string, defaultValue int) int {
 	return defaultValue
 }
 
+/*
 func getEnvOrDefaultBool(key string, defaultValue bool) bool {
 	if value := os.Getenv(key); value != "" {
 		if v, err := strconv.ParseBool(value); err == nil {
@@ -58,3 +59,4 @@ func getEnvOrDefaultBool(key string, defaultValue bool) bool {
 
 	return defaultValue
 }
+*/

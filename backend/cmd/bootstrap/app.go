@@ -14,6 +14,7 @@ type Application struct {
 	Env      *Env
 	Router   *gin.Engine
 	Postgres *postgres.Manager
+	Services Services
 }
 
 // Shutdown protocol for gracefully shutting down the application. It closes all database connections and logs the shutdown process.
