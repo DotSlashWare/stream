@@ -49,7 +49,7 @@ func (service *Service) SearchForMovie(query string, page int) *SearchResults {
 
 	url := service.getBaseApiEndpoint("search/movie", map[string]string{
 		"query": query,
-		"page": fmt.Sprint(page),
+		"page":  fmt.Sprint(page),
 	})
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)

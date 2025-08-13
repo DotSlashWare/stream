@@ -25,27 +25,27 @@ func NewTmdbService(apiUrl string, apiKey string, contextTimeout int) *Service {
 }
 
 func (service *Service) getBaseApiEndpoint(endpoint string, queryParams ...map[string]string) string {
-    baseURL := strings.TrimRight(service.ApiUrl, "/")
-    endpoint = strings.TrimLeft(endpoint, "/")
+	baseURL := strings.TrimRight(service.ApiUrl, "/")
+	endpoint = strings.TrimLeft(endpoint, "/")
 
-    parsedURL, err := url.Parse(baseURL + "/" + endpoint)
-    if err != nil {
-        return fmt.Sprintf("%s/%s?api_key=%s", baseURL, endpoint, service.ApiKey)
-    }
+	parsedURL, err := url.Parse(baseURL + "/" + endpoint)
+	if err != nil {
+		return fmt.Sprintf("%s/%s?api_key=%s", baseURL, endpoint, service.ApiKey)
+	}
 
-    query := parsedURL.Query()
-    
-    query.Set("api_key", service.ApiKey)
-    
-    for _, params := range queryParams {
-        for key, value := range params {
-            if value != "" {
-                query.Set(key, value)
-            }
-        }
-    }
+	query := parsedURL.Query()
 
-    parsedURL.RawQuery = query.Encode()
-    
-    return parsedURL.String()
+	query.Set("api_key", service.ApiKey)
+
+	for _, params := range queryParams {
+		for key, value := range params {
+			if value != "" {
+				query.Set(key, value)
+			}
+		}
+	}
+
+	parsedURL.RawQuery = query.Encode()
+
+	return parsedURL.String()
 }
