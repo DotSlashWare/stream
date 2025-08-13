@@ -6,7 +6,7 @@ networks:
     internal: false
   stream_internal:
     driver: bridge
-    internal: true
+    internal: false
 
 services:
   backend:
