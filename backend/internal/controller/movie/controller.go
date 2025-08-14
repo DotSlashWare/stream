@@ -8,14 +8,16 @@ import (
 )
 
 type Controller struct {
-	initTime    time.Time
-	tmdbService *tmdb.Service
+	initTime     time.Time
+	tmdbService  *tmdb.Service
+	streamApiUrl string
 }
 
-func NewMovieController(tmdbService *tmdb.Service) *Controller {
+func NewMovieController(tmdbService *tmdb.Service, streamApiUrl string) *Controller {
 	return &Controller{
 		initTime:    time.Now(),
 		tmdbService: tmdbService,
+		streamApiUrl: streamApiUrl,
 	}
 }
 

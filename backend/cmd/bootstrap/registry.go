@@ -11,6 +11,7 @@ import (
 // Controller registration protocol for setting up route controllers.
 func (app *Application) RegisterControllers() {
 	// env := app.Env
+	config := app.Config
 
 	{ // @logic: Health Controller
 
@@ -19,7 +20,7 @@ func (app *Application) RegisterControllers() {
 	}
 
 	{ // @logic: Movie Controller
-		movieController := movie.NewMovieController(app.Services.Tmdb)
+		movieController := movie.NewMovieController(app.Services.Tmdb, config.MovieConfig.StreamAPIUrl)
 		movieController.Register(app.Router)
 	}
 
