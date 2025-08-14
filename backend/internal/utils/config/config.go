@@ -1,12 +1,12 @@
 package config
 
 type Config struct {
-    TMDBService      TMDBServiceConfig      `json:"tmdb_service"`
-    InvidiousService InvidiousServiceConfig `json:"invidious_service"`
-    LocalService     LocalServiceConfig     `json:"local_service"`
-    MovieConfig      MovieConfig            `json:"movie_config"`
-    TVConfig         TVConfig               `json:"tv_config"`
-    VideoConfig      VideoConfig            `json:"video_config"`
+	TMDBService      TMDBServiceConfig      `json:"tmdb_service"`
+	InvidiousService InvidiousServiceConfig `json:"invidious_service"`
+	LocalService     LocalServiceConfig     `json:"local_service"`
+	MovieConfig      MovieConfig            `json:"movie_config"`
+	TVConfig         TVConfig               `json:"tv_config"`
+	VideoConfig      VideoConfig            `json:"video_config"`
 }
 
 func NewConfig() *Config {
