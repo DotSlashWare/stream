@@ -16,11 +16,13 @@ type Service struct {
 }
 
 func NewTmdbService(apiUrl string, apiKey string, contextTimeout int) *Service {
+	httpClient := http.Client{Timeout: time.Duration(contextTimeout) * time.Second}
+
 	return &Service{
 		ApiUrl:         apiUrl,
 		ApiKey:         apiKey,
 		ContextTimeout: time.Duration(contextTimeout) * time.Second,
-		httpClient:     &http.Client{Timeout: time.Duration(contextTimeout) * time.Second},
+		httpClient:     &httpClient,
 	}
 }
 

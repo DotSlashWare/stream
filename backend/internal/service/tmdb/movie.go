@@ -8,42 +8,42 @@ import (
 	"net/http"
 )
 
-func (service *Service) GetMovieById(id int) *MovieData {
+func (service *Service) GetMovieById(id string) (*MovieData, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), service.ContextTimeout)
 	defer cancel()
 
-	url := service.getBaseApiEndpoint(fmt.Sprintf("movie/%d", id))
+	url := service.getBaseApiEndpoint(fmt.Sprintf("movie/%s", id))
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
-		log.Printf("Error creating request for movie ID %d: %v", id, err)
-		return nil
+		log.Printf("Error creating request for movie ID %s: %v.", id, err)
+		return nil, err
 	}
 
 	resp, err := service.httpClient.Do(req)
 	if err != nil {
-		log.Printf("Error fetching movie ID %d: %v", id, err)
-		return nil
+		log.Printf("Error fetching movie ID %s: %v.", id, err)
+		return nil, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		log.Printf("API returned status %d for movie ID %d", resp.StatusCode, id)
-		return nil
+		log.Printf("API returned status %d for movie ID %s.", resp.StatusCode, id)
+		return nil, fmt.Errorf("API returned status %d", resp.StatusCode)
 	}
 
 	var movieData MovieData
 	decoder := json.NewDecoder(resp.Body)
 	err = decoder.Decode(&movieData)
 	if err != nil {
-		log.Printf("Error decoding response for movie ID %d: %v", id, err)
-		return nil
+		log.Printf("Error decoding response for movie ID %s: %v.", id, err)
+		return nil, err
 	}
 
-	return &movieData
+	return &movieData, nil
 }
 
-func (service *Service) SearchForMovie(query string, page int) *SearchResults {
+func (service *Service) SearchForMovie(query string, page int) (*SearchResults, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), service.ContextTimeout)
 	defer cancel()
 
@@ -54,29 +54,29 @@ func (service *Service) SearchForMovie(query string, page int) *SearchResults {
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
-		log.Printf("Error creating request for search query '%s': %v", query, err)
-		return nil
+		log.Printf("Error creating request for search query '%s': %v.", query, err)
+		return nil, err
 	}
 
 	resp, err := service.httpClient.Do(req)
 	if err != nil {
-		log.Printf("Error fetching search results for query '%s': %v", query, err)
-		return nil
+		log.Printf("Error fetching search results for query '%s': %v.", query, err)
+		return nil, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		log.Printf("API returned status %d for search query '%s'", resp.StatusCode, query)
-		return nil
+		log.Printf("API returned status %d for search query '%s'.", resp.StatusCode, query)
+		return nil, err
 	}
 
 	var searchResults SearchResults
 	decoder := json.NewDecoder(resp.Body)
 	err = decoder.Decode(&searchResults)
 	if err != nil {
-		log.Printf("Error decoding response for search query '%s': %v", query, err)
-		return nil
+		log.Printf("Error decoding response for search query '%s': %v.", query, err)
+		return nil, err
 	}
 
-	return &searchResults
+	return &searchResults, nil
 }

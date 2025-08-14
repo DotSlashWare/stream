@@ -9,7 +9,7 @@ import (
 type CustomFormatter struct{}
 
 // Formats the GIN log output according to a custom format.
-func (f *CustomFormatter) Format(param gin.LogFormatterParams) string {
+func (formatter *CustomFormatter) Format(param gin.LogFormatterParams) string {
 	timestamp := param.TimeStamp.Format("2006/01/02 - 15:04:05")
 
 	// @returns: "[2006/01/02 - 15:04:05] - [status code] | [latency] | [client IP] | [method] [path]"

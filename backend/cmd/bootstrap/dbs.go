@@ -16,5 +16,5 @@ func (app *Application) SetupDatabases() {
 	logSanitizer.AddFilter(filters.NewDatabaseFilter())
 
 	app.Postgres = postgres.NewManager(env.PostgresURL, env.ContextTimeout, logSanitizer)
-	log.Println("Databases initialized successfully")
+	log.Println("Databases initialized successfully.")
 }

@@ -25,10 +25,10 @@ func NewHealthController(
 }
 
 // Sets up the routes for the health controller.
-func (c *Controller) Register(router *gin.Engine) {
+func (controller *Controller) Register(router *gin.Engine) {
 	healthGroup := router.Group("/health")
 	{
-		healthGroup.GET("", c.GetHealth)
-		healthGroup.GET("/detailed", c.GetHealthDetailed)
+		healthGroup.GET("", controller.GetHealth)
+		healthGroup.GET("/detailed", controller.GetHealthDetailed)
 	}
 }

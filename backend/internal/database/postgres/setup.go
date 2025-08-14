@@ -14,42 +14,42 @@ import (
 )
 
 // Setup function for the PostgreSQL database, creates tables and schemas as needed.
-func (m *Manager) SetupProtocol() error {
+func (manager *Manager) SetupProtocol() error {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Printf("Database setup panicked: %v", r)
+			log.Printf("Database setup panicked: %v.", r)
 		}
 	}()
 
-	log.Println("Setting up PostgreSQL database")
+	log.Println("Setting up PostgreSQL database.")
 
 	// Ensure migration tracking table exists
-	if err := m.ensureMigrationTable(); err != nil {
+	if err := manager.ensureMigrationTable(); err != nil {
 		return fmt.Errorf("failed to ensure migration table: %w", err)
 	}
 
-	scriptsDir := "/app/scripts/postgres"
+	scriptsDir := "/var/scripts/stream/postgres"
 
 	// Validate scripts directory
-	if err := m.validateScriptsDirectory(scriptsDir); err != nil {
+	if err := manager.validateScriptsDirectory(scriptsDir); err != nil {
 		return fmt.Errorf("scripts directory validation failed: %w", err)
 	}
 
-	scripts, err := m.discoverScripts(scriptsDir)
+	scripts, err := manager.discoverScripts(scriptsDir)
 	if err != nil {
 		return fmt.Errorf("failed to discover scripts: %w", err)
 	}
 
 	if len(scripts) == 0 {
-		log.Println("No setup scripts found in scripts directory")
+		log.Println("No setup scripts found in scripts directory.")
 		return nil
 	}
 
-	log.Printf("Found %d setup scripts", len(scripts))
+	log.Printf("Found %d setup scripts.", len(scripts))
 
 	// Execute scripts in order
 	for _, script := range scripts {
-		if err := m.executeScript(script); err != nil {
+		if err := manager.executeScript(script); err != nil {
 			return fmt.Errorf("setup failed at script %s: %w", script.Name, err)
 		}
 	}
@@ -59,13 +59,13 @@ func (m *Manager) SetupProtocol() error {
 }
 
 // Creates the migration tracking table if it doesn't exist
-func (m *Manager) ensureMigrationTable() error {
-	migrationManager := postgresparser.NewMigrationManager(m.Client)
+func (manager *Manager) ensureMigrationTable() error {
+	migrationManager := postgresparser.NewMigrationManager(manager.Client)
 	return migrationManager.EnsureMigrationTable()
 }
 
 // Finds and parses all setup scripts in the directory
-func (m *Manager) discoverScripts(scriptsDir string) ([]*postgresparser.ScriptInfo, error) {
+func (manager *Manager) discoverScripts(scriptsDir string) ([]*postgresparser.ScriptInfo, error) {
 	files, err := os.ReadDir(scriptsDir)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read scripts directory: %w", err)
@@ -83,9 +83,9 @@ func (m *Manager) discoverScripts(scriptsDir string) ([]*postgresparser.ScriptIn
 			continue
 		}
 
-		script, err := m.parseScript(scriptsDir, filename)
+		script, err := manager.parseScript(scriptsDir, filename)
 		if err != nil {
-			log.Printf("Warning: failed to parse script %s: %v", filename, err)
+			log.Printf("Warning: failed to parse script %s: %v.", filename, err)
 			continue
 		}
 
@@ -101,7 +101,7 @@ func (m *Manager) discoverScripts(scriptsDir string) ([]*postgresparser.ScriptIn
 }
 
 // Reads and parses a script file
-func (m *Manager) parseScript(scriptsDir, filename string) (*postgresparser.ScriptInfo, error) {
+func (manager *Manager) parseScript(scriptsDir, filename string) (*postgresparser.ScriptInfo, error) {
 	filePath := filepath.Join(scriptsDir, filename)
 
 	content, err := os.ReadFile(filePath)
@@ -128,8 +128,8 @@ func (m *Manager) parseScript(scriptsDir, filename string) (*postgresparser.Scri
 }
 
 // Executes a single setup script
-func (m *Manager) executeScript(script *postgresparser.ScriptInfo) error {
-	migrationManager := postgresparser.NewMigrationManager(m.Client)
+func (manager *Manager) executeScript(script *postgresparser.ScriptInfo) error {
+	migrationManager := postgresparser.NewMigrationManager(manager.Client)
 
 	// Check if script has already been executed successfully
 	status, err := migrationManager.GetMigrationStatus(script.Name)
@@ -138,14 +138,14 @@ func (m *Manager) executeScript(script *postgresparser.ScriptInfo) error {
 	}
 
 	if status == "success" {
-		log.Printf("Script %s already executed successfully, skipping", script.Name)
+		log.Printf("Script %s already executed successfully, skipping.", script.Name)
 		return nil
 	}
 
-	log.Printf("Executing script: %s", script.Name)
+	log.Printf("Executing script: %s.", script.Name)
 
 	if script.Metadata != nil && script.Metadata.Description != "" {
-		log.Printf("Description: %s", script.Metadata.Description)
+		log.Printf("Description: %s.", script.Metadata.Description)
 	}
 
 	// Check dependencies
@@ -154,7 +154,7 @@ func (m *Manager) executeScript(script *postgresparser.ScriptInfo) error {
 	}
 
 	// Execute the script in a transaction
-	tx, err := m.Client.Begin()
+	tx, err := manager.Client.Begin()
 	if err != nil {
 		return fmt.Errorf("failed to begin transaction: %w", err)
 	}
@@ -194,7 +194,7 @@ func (m *Manager) executeScript(script *postgresparser.ScriptInfo) error {
 	// Record migration in the same transaction
 	err = migrationManager.RecordMigration(tx, metadata, checksum)
 	if err != nil {
-		log.Printf("Warning: failed to record migration for %s: %v", script.Name, err)
+		log.Printf("Warning: failed to record migration for %s: %v.", script.Name, err)
 	}
 
 	if !result.Success {
@@ -210,7 +210,7 @@ func (m *Manager) executeScript(script *postgresparser.ScriptInfo) error {
 }
 
 // Validates that the scripts directory exists and is a directory
-func (m *Manager) validateScriptsDirectory(scriptsDir string) error {
+func (manager *Manager) validateScriptsDirectory(scriptsDir string) error {
 	info, err := os.Stat(scriptsDir)
 	if os.IsNotExist(err) {
 		return fmt.Errorf("directory does not exist: %s", scriptsDir)
