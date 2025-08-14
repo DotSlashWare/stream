@@ -1,12 +1,15 @@
 name: dotslashstream
 
 networks:
-  stream_external:
+  public_net:
     driver: bridge
     internal: false
-  stream_internal:
+  internal_net:
     driver: bridge
     internal: true
+  egress_net:
+    driver: bridge
+    internal: false
 
 services:
   frontend:
@@ -15,29 +18,43 @@ services:
     ports:
       - 80:3000
     networks:
-      - stream_external
-    volumes:
-      - stream_data:/var/log/stream
+      - public_net
+      - internal_net
     depends_on:
       backend:
         condition: service_healthy
       postgres:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3000/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   backend:
     build: ./backend
     restart: unless-stopped
-    ports:
+    ports: # disable this on production
       - 9340:9340
     networks:
-      - stream_internal
-      - stream_external
+      - internal_net
+      - egress_net
     volumes:
-      - stream_data:/var/log/stream
-      - stream_data:/var/config/stream
+      - stream_config:/var/config/stream
       - stream_media:/var/media/stream
       - ./scripts/backend:/var/scripts/stream
-      - ./configs/backend:/var/config/stream
+      - ./configs/backend:/var/config/stream_overrides
     env_file:
       - ./.envs/backend.env
     healthcheck:
@@ -49,23 +66,59 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      invidious_companion:
+        condition: service_healthy
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
 
   postgres:
     image: postgres:latest
     restart: unless-stopped
     networks:
-      - stream_internal
+      - internal_net
     volumes:
       - stream_databases:/var/lib/postgresql/data
     env_file:
       - ./.envs/postgres.env
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U $POSTGRES_USER -d $POSTGRES_PASSWORD" ]
+      test: [ "CMD-SHELL", "pg_isready -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\" -h localhost || exit 1" ]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  invidious_companion:
+    image: quay.io/invidious/invidious-companion:latest
+    restart: unless-stopped
+    expose:
+      - "8282"
+    networks:
+      - egress_net
+    volumes:
+      - /var/tmp/youtubei.js:/var/tmp/youtubei.js:rw
+    env_file:
+      - ./.envs/invidious.env
+    cap_drop:
+      - ALL
+    read_only: true
+    user: 10001:10001
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
 
 volumes:
-  stream_data:
+  stream_config:
   stream_media:
   stream_databases:
