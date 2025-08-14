@@ -21,7 +21,7 @@ func (controller *Controller) GetMovieById(ctx *gin.Context) {
 func (controller *Controller) SearchForMovie(ctx *gin.Context) {
 	query := ctx.Query("query")
 	if query == "" {
-		ctx.JSON(400, gin.H{"error": "Query parameter 'query' is required"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Query parameter 'query' is required"})
 		return
 	}
 	
