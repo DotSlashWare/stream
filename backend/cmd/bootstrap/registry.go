@@ -28,12 +28,12 @@ func (app *Application) RegisterControllers() {
 
 // Middleware registration protocol for setting up global middleware.
 func (app *Application) RegisterMiddleware() {
-	env := app.Env
+	// env := app.Env
 
 	{ // @logic: Logger Middleware (global)
-		logger := logger.NewLoggerMiddleware(app.Router, env.LogPath)
+		logger := logger.NewLoggerMiddleware(app.Router)
 		logger.Register(app.Router)
-		log.Printf("Logger middleware registered with log path: %s.", env.LogPath)
+		log.Println("Logger middleware registered")
 	}
 
 	log.Println("Registered global middleware successfully.")
