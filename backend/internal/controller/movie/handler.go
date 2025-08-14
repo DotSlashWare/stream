@@ -11,7 +11,7 @@ func (controller *Controller) GetMovieById(ctx *gin.Context) {
 
 	movieData, err := controller.tmdbService.GetMovieById(id)
 	if err != nil {
-		ctx.JSON(500, gin.H{"error": "Failed to fetch movie data"})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch movie data"})
 		return
 	}
 
