@@ -39,5 +39,5 @@ func (controller *Controller) SearchForMovie(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(200, results)
+	ctx.JSON(http.StatusOK, results)
 }
