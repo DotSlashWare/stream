@@ -25,7 +25,7 @@ func (controller *Controller) SearchForMovie(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Query parameter 'query' is required"})
 		return
 	}
-	
+
 	pageStr := ctx.DefaultQuery("page", "1")
 
 	page, err := strconv.Atoi(pageStr)
