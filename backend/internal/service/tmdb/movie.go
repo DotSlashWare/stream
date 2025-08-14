@@ -29,7 +29,7 @@ func (service *Service) GetMovieById(id string) (*MovieData, error) {
 
 	if resp.StatusCode != http.StatusOK {
 		log.Printf("API returned status %d for movie ID %s.", resp.StatusCode, id)
-		return nil, err
+		return nil, fmt.Errorf("API returned status %d", resp.StatusCode)
 	}
 
 	var movieData MovieData
