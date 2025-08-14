@@ -29,7 +29,7 @@ func (controller *Controller) SearchForMovie(ctx *gin.Context) {
 
 	page, err := strconv.Atoi(pageStr)
 	if err != nil {
-		ctx.JSON(400, gin.H{"error": "Invalid page number"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid page number"})
 		return
 	}
 
