@@ -35,7 +35,7 @@ func (controller *Controller) SearchForMovie(ctx *gin.Context) {
 
 	results, err := controller.tmdbService.SearchForMovie(query, page)
 	if err != nil {
-		ctx.JSON(500, gin.H{"error": "Failed to search for movies"})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to search for movies"})
 		return
 	}
 
