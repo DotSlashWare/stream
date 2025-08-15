@@ -13,11 +13,10 @@ type Controller struct {
 	streamApiUrl string
 }
 
-func NewMovieController(tmdbService *tmdb.Service, streamApiUrl string) *Controller {
+func NewMovieController(tmdbService *tmdb.Service) *Controller {
 	return &Controller{
-		initTime:    time.Now(),
-		tmdbService: tmdbService,
-		streamApiUrl: streamApiUrl,
+		initTime:     time.Now(),
+		tmdbService:  tmdbService,
 	}
 }
 
