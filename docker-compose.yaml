@@ -54,7 +54,7 @@ services:
       - stream_config:/var/config/stream
       - stream_media:/var/media/stream
       - ./scripts/backend:/var/scripts/stream
-      - ./configs/backend:/var/config/stream_overrides
+      - ./configs/backend:/var/config/stream
     env_file:
       - ./.envs/backend.env
     healthcheck:
