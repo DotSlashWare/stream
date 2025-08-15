@@ -13,15 +13,3 @@ type InvidiousServiceConfig struct {
 type LocalServiceConfig struct {
 	MediaPath string `json:"media_path"`
 }
-
-type MovieConfig struct {
-	StreamAPIUrl string `json:"stream_api_url"`
-}
-
-type TVConfig struct {
-	StreamAPIUrl string `json:"stream_api_url"`
-}
-
-type VideoConfig struct {
-	StreamAPIUrl string `json:"stream_api_url"`
-}
