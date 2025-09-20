@@ -10,6 +10,7 @@ type Env struct {
 	Port           string
 	Environment    string
 	PostgresURL    string
+	ConfigPath     string
 	FirstTimeSetup bool
 }
 
@@ -18,6 +19,7 @@ func NewEnv() *Env {
 		ContextTimeout: getEnvOrDefaultInt("CONTEXT_TIMEOUT", 30),
 		Port:           getEnvOrDefault("PORT", "9340"),
 		Environment:    getEnvOrDefault("ENVIRONMENT", "release"),
+		ConfigPath:     getEnvOrDefault("CONFIG_PATH", "/var/config/stream"),
 		PostgresURL:    getEnvOrDefault("POSTGRES_URL", "postgresql://stream_admin:stream_admin@postgres:5432/stream?sslmode=disable"),
 	}
 }

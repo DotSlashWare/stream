@@ -4,7 +4,6 @@ import (
 	"log"
 
 	"github.com/artumont/DotSlashStream/backend/internal/controller/health"
-	"github.com/artumont/DotSlashStream/backend/internal/controller/movie"
 	"github.com/artumont/DotSlashStream/backend/internal/middleware/logger"
 )
 
@@ -19,9 +18,9 @@ func (app *Application) RegisterControllers() {
 		healthController.Register(app.Router)
 	}
 
-	{ // @logic: Movie Controller
-		movieController := movie.NewMovieController(app.Services.Tmdb)
-		movieController.Register(app.Router)
+	// v1 := r.Group("/api/v1")
+	{
+
 	}
 
 	log.Println("Registered controllers successfully.")
