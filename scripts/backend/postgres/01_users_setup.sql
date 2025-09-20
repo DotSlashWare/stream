@@ -1,6 +1,0 @@
--- METADATA:
--- {
---   "description": "Setup script for the media server users",
---   "version": "1.0.0", 
---   "author": "artumont"
--- }
