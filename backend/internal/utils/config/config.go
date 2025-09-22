@@ -9,7 +9,6 @@ import (
 type Config struct {
 	TMDBService      TMDBServiceConfig      `json:"tmdb_service"`
 	InvidiousService InvidiousServiceConfig `json:"invidious_service"`
-	TorrentService   TorrentService         `json:"torrent_service"`
 	LocalService     LocalServiceConfig     `json:"local_service"`
 }
 
@@ -22,10 +21,6 @@ func NewConfig() *Config {
 		InvidiousService: InvidiousServiceConfig{
 			VideoAPIUrl: "https://invidious.example.com/api/v1",
 			VideoAPIKey: "",
-		},
-		TorrentService: TorrentService{
-			TorrentServiceUrl: "https://torrent.example.com/api",
-			TorrentServiceKey: "",
 		},
 		LocalService: LocalServiceConfig{
 			MediaPath: "/var/media/stream",
