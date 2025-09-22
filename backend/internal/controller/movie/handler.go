@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// GetMovieById handles requests to fetch movie details by ID.
 func (controller *Controller) GetMovieById(ctx *gin.Context) {
 	id := ctx.Param("id")
 
@@ -19,6 +20,7 @@ func (controller *Controller) GetMovieById(ctx *gin.Context) {
 	ctx.JSON(200, movieData)
 }
 
+// SearchForMovie handles requests to search for movies by a query string.
 func (controller *Controller) SearchForMovie(ctx *gin.Context) {
 	query := ctx.Query("query")
 	if query == "" {
