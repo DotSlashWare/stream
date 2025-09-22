@@ -288,15 +288,13 @@ func (p *Parser) executeDDL(tx *sql.Tx, sql string) (interface{}, error) {
 	return "DDL executed successfully", nil
 }
 
-// ValidateSQL performs basic SQL validation
-func (p *Parser) ValidateSQL(sqlContent string) error {
-	// Basic validation - check for obvious issues
+// ValidateSQL performs basic SQL validation for dangerous patterns and obvious issues
+func ValidateSQL(sqlContent string) error {
 	content := strings.TrimSpace(sqlContent)
 	if content == "" {
 		return fmt.Errorf("SQL content is empty")
 	}
 
-	// Check for basic dangerous SQL patterns (very basic)
 	dangerousPatterns := []string{
 		"DROP DATABASE",
 		"TRUNCATE",
