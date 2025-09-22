@@ -10,8 +10,7 @@
 CREATE TABLE IF NOT EXISTS profiles(
     id SERIAL PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
-    password_hash VARCHAR(255),
-    totp_secret VARCHAR(255),
+    is_child BOOLEAN NOT NULL DEFAULT FALSE,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     last_login TIMESTAMPTZ
@@ -20,7 +19,6 @@ CREATE TABLE IF NOT EXISTS profiles(
 -- Table to store profile settings and preferences
 CREATE TABLE IF NOT EXISTS profile_settings(
     profile_id INT PRIMARY KEY REFERENCES Profiles(id) ON DELETE CASCADE,
-    is_over_18 BOOLEAN NOT NULL DEFAULT FALSE,
     preferred_media_type INT REFERENCES media_types(id),
     preferred_language INT REFERENCES supported_languages(id),
     autoplay_next_episode BOOLEAN NOT NULL DEFAULT TRUE,
@@ -37,4 +35,16 @@ CREATE TABLE IF NOT EXISTS profile_watch_history(
     media_cache JSONB, -- cache metadata to avoid extra fetches (stuff like title, poster, etc.)
     watched_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     UNIQUE(profile_id, media_id)
+);
+
+-- Table to store custom playlists created by profiles
+CREATE TABLE IF NOT EXISTS profile_playlists(
+    id BIGSERIAL PRIMARY KEY,
+    profile_id INT REFERENCES Profiles(id) ON DELETE CASCADE,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    visibility INT NOT NULL DEFAULT 0 -- 0: private, 1: public
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    playlist_data JSONB NOT NULL DEFAULT '[]' -- list of media items with metadata
 );
