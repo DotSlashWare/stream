@@ -10,6 +10,10 @@ type InvidiousServiceConfig struct {
 	VideoAPIKey string `json:"video_api_key"`
 }
 
+type TorrentService struct {
+	TorrentServiceUrl string `json:"torrent_service_url"`
+	TorrentServiceKey string `json:"torrent_service_key"`
+}
 type LocalServiceConfig struct {
 	MediaPath string `json:"media_path"`
 }

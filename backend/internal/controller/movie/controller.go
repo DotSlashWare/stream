@@ -15,8 +15,8 @@ type Controller struct {
 
 func NewMovieController(tmdbService *tmdb.Service) *Controller {
 	return &Controller{
-		initTime:     time.Now(),
-		tmdbService:  tmdbService,
+		initTime:    time.Now(),
+		tmdbService: tmdbService,
 	}
 }
 

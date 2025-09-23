@@ -6,6 +6,7 @@ import (
 )
 
 type Env struct {
+	Version        string
 	ContextTimeout int
 	Port           string
 	Environment    string
@@ -16,6 +17,7 @@ type Env struct {
 
 func NewEnv() *Env {
 	return &Env{
+		Version:        getEnvOrDefault("VERSION", "1.0.0"),
 		ContextTimeout: getEnvOrDefaultInt("CONTEXT_TIMEOUT", 30),
 		Port:           getEnvOrDefault("PORT", "9340"),
 		Environment:    getEnvOrDefault("ENVIRONMENT", "release"),

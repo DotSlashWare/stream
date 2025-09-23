@@ -4,7 +4,6 @@ import (
 	"log"
 
 	"github.com/artumont/DotSlashStream/backend/internal/controller/health"
-	"github.com/artumont/DotSlashStream/backend/internal/controller/movie"
 	"github.com/artumont/DotSlashStream/backend/internal/middleware/logger"
 )
 

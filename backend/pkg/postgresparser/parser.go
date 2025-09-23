@@ -296,7 +296,7 @@ func (p *Parser) ValidateSQL(sqlContent string) error {
 		return fmt.Errorf("SQL content is empty")
 	}
 
-	// Check for basic SQL injection patterns (very basic)
+	// Check for basic dangerous SQL patterns (very basic)
 	dangerousPatterns := []string{
 		"DROP DATABASE",
 		"TRUNCATE",
