@@ -20,7 +20,7 @@ func NewMovieController(tmdbService *tmdb.Service) *Controller {
 	}
 }
 
-func (controller *Controller) Register(router *gin.Engine) {
+func (controller *Controller) Register(router *gin.RouterGroup) {
 	movieGroup := router.Group("/movie")
 	{
 		movieGroup.GET("/search", controller.SearchForMovie)

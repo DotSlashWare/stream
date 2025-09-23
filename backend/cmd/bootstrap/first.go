@@ -8,8 +8,6 @@ import (
 
 // Initializes the application for the first time by setting up the databases and creating a flag file.
 func (app *Application) FirstTimeSetup() {
-	log.Println("Starting first-time setup.")
-
 	app.Postgres.SetupProtocol()
 
 	app.MarkFirstTimeSetupComplete()

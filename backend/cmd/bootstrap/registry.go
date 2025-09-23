@@ -13,15 +13,16 @@ func (app *Application) RegisterControllers() {
 	// env := app.Env
 	// config := app.Config
 
-	{ // @logic: Health Controller
-
+	baseGroup := app.Router.Group("/")
+	{
 		healthController := health.NewHealthController(app.InitTime, app.Postgres)
-		healthController.Register(app.Router)
+		healthController.Register(baseGroup)
 	}
 
-	{ // @logic: Movie Controller
+	apiGroup := app.Router.Group("/api")
+	{
 		movieController := movie.NewMovieController(app.Services.Tmdb)
-		movieController.Register(app.Router)
+		movieController.Register(apiGroup)
 	}
 
 	log.Println("Registered controllers successfully.")
