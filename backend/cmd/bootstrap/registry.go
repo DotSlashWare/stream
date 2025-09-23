@@ -18,11 +18,13 @@ func (app *Application) RegisterControllers() {
 		healthController.Register(baseGroup)
 	}
 
+	/*
 	apiGroup := app.Router.Group("/api")
 	{
-		movieController := movie.NewMovieController(app.Services.Tmdb)
+		movieController := movie.NewMovieController(app.Services.TMDBService)
 		movieController.Register(apiGroup)
 	}
+	*/
 
 	log.Println("Registered controllers successfully.")
 }

@@ -5,6 +5,7 @@ import (
 )
 
 type Services struct {
+	TMDBService interface{}
 }
 
 func (app *Application) SetupServices() {
