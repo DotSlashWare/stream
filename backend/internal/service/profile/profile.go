@@ -35,6 +35,28 @@ func (service *Service) GetAllProfiles() ([]Profile, error) {
 		}
 		profiles = append(profiles, profile)
 	}
-	
+
 	return profiles, nil
+}
+
+// GetProfileByID retrieves a profile by its ID from the database.
+func (service *Service) GetProfileByID(id int) (*Profile, error) {
+	dbManager := service.Database
+
+	rows, err := dbManager.SelectFrom("profiles", []string{"id", "username", "is_child", "created_at", "updated_at", "last_login"}, "id = $1", id)
+	if err != nil {
+		log.Printf("Error fetching profile by ID: %v", err)
+		return nil, err
+	}
+
+	var profile Profile
+	if rows.Next() {
+		if err := rows.Scan(&profile.Id, &profile.Username, &profile.IsChild, &profile.CreatedAt, &profile.UpdatedAt, &profile.LastLogin); err != nil {
+			log.Printf("Error scanning profile row: %v", err)
+			return nil, err
+		}
+		return &profile, nil
+	}
+
+	return nil, nil
 }
